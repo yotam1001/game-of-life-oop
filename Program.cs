@@ -15,7 +15,7 @@ namespace GameOfLifeOOP
                 for(int y = -1; y<=1; y++)
                 {
                     if(IsInBounds(i-x, j-y)){
-                        if(boardState[(i - x), (j - y)] == true && x != 1 && y != 1)
+                        if(state[(i - x), (j - y)] == true && x != 0 && y != 0)
                         {
                             count++;
                         }//make sure that the cell dosent count itself
@@ -25,13 +25,13 @@ namespace GameOfLifeOOP
             return count;
         }
 
-        private static bool UpdateCell(bool[,] boardState, int[,] counterBoard, int i, int j)
+        private static bool UpdateCell(bool state, int counterBoard)
         {
-        if (boardState[i ,j] == true){
-            if(counterBoard[i, j] < 2)
+        if (state == true){
+            if(counterBoard < 2)
             {
                 return false;
-            }else if(counterBoard[i, j] > 2 && counterBoard[i, j] < 4)
+            }else if(counterBoard >= 2 && counterBoard < 4)
             {
                 return true;
                 }
@@ -42,7 +42,7 @@ namespace GameOfLifeOOP
             }
             else
             {
-                if (counterBoard[i, j] == 2)
+                if (counterBoard == 3)
                 {
                     return true;
                 }else{return false;}
@@ -50,20 +50,20 @@ namespace GameOfLifeOOP
         }
         private int boardSize;
 
-        private bool[,] boardState;
+        private bool[,] state;
         public GameBoard(int boardSize)
         {
             Random rnd = new Random();
 
             this.boardSize = (boardSize-1);
 
-            boardState = new bool [boardSize, boardSize];
+            state = new bool [boardSize, boardSize];
 
             for (int i = 0; i < boardSize; i++)
             {
                 for (int j = 0; j < boardSize; j++)
                 {
-                    boardState[i, j] = rnd.NextDouble() >= 0.5;
+                    state[i, j] = rnd.NextDouble() >= 0.5;
                 }
             }
 
@@ -76,14 +76,14 @@ namespace GameOfLifeOOP
             {
                 for (int j = 0; j < boardSize; j++)
                 {
-                    boardState[i, j] = rnd.NextDouble() >= 0.5;
+                    state[i, j] = rnd.NextDouble() >= 0.5;
                 }
             }
         }
 
         private bool IsInBounds(int i, int j)
         {
-            if(i <= boardState.GetLength(1) && i >= 0 || j <= boardState.GetLength(1) && j >= 0)//checks if the cell is in the array, if its out of bound 0 < x < i, 0< y < j;
+            if(i <= state.GetLength(1) && i >= 0 || j <= state.GetLength(1) && j >= 0)//checks if the cell is in the array, if its out of bound 0 < x < i, 0< y < j;
             {
                 return true;
             }
@@ -106,7 +106,7 @@ namespace GameOfLifeOOP
             {
                 for(int j = 0; j < boardSize; j++)
                 {
-                    boardState[i,j] = UpdateCell(boardState ,BoardCounter, i, j);
+                    state[i,j] = UpdateCell(state[i, j] ,BoardCounter[i,j]);
                 }//this updates the  board counter for each alive cell, and stores it in the counter array.
             }
         }
